@@ -31,10 +31,10 @@ export default function ProductsPage() {
   if (error) return <p>❌ {error}</p>;
 
   return (
-    <div className="container">
-      <h1 className="mb-4">Prodotti</h1>
+    <div className="container-fluid px-4">
+      <h1 className="mb-4 text-center">Prodotti</h1>
 
-      <div className="row g-4">
+      <div className="row justify-content-center g-4">
         {products.map((p) => {
           return (
             <div className="col-12 col-sm-6 col-md-4 col-lg-3" key={p.id}>
@@ -46,7 +46,7 @@ export default function ProductsPage() {
                   style={{ height: "180px", objectFit: "contain" }}
                 />
 
-                <div className="card-body d-flex flex-column">
+                <div className="card-body d-flex flex-column text-center">
                   <h6 className="card-title">{p.title}</h6>
                   <p className="fw-bold mt-auto">{p.price} €</p>
                 </div>
