@@ -17,6 +17,7 @@ export default function ProductsPage() {
         return res.json();
       })
       .then((data) => {
+        console.log("DATI:", data); // debug
         setProducts(data);
         setLoading(false);
       })
@@ -30,16 +31,30 @@ export default function ProductsPage() {
   if (error) return <p>❌ {error}</p>;
 
   return (
-    <div>
-      <h1>Prodotti</h1>
+    <div className="container">
+      <h1 className="mb-4">Prodotti</h1>
 
-      <ul>
-        {products.map((p) => (
-          <li key={p.id}>
-            {p.title} — <strong>{p.price}€</strong>
-          </li>
-        ))}
-      </ul>
+      <div className="row g-4">
+        {products.map((p) => {
+          return (
+            <div className="col-12 col-sm-6 col-md-4 col-lg-3" key={p.id}>
+              <div className="card h-100 shadow-sm">
+                <img
+                  src={p.image}
+                  alt={p.title}
+                  className="card-img-top p-3"
+                  style={{ height: "180px", objectFit: "contain" }}
+                />
+
+                <div className="card-body d-flex flex-column">
+                  <h6 className="card-title">{p.title}</h6>
+                  <p className="fw-bold mt-auto">{p.price} €</p>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }
