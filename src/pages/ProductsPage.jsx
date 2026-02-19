@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 export default function ProductsPage() {
   const [products, setProducts] = useState([]);
@@ -17,7 +18,6 @@ export default function ProductsPage() {
         return res.json();
       })
       .then((data) => {
-        console.log("DATI:", data); // debug
         setProducts(data);
         setLoading(false);
       })
@@ -27,7 +27,10 @@ export default function ProductsPage() {
       });
   }, []);
 
+  // loading
   if (loading) return <p>Caricamento...</p>;
+
+  // errore
   if (error) return <p>❌ {error}</p>;
 
   return (
@@ -38,19 +41,24 @@ export default function ProductsPage() {
         {products.map((p) => {
           return (
             <div className="col-12 col-sm-6 col-md-4 col-lg-3" key={p.id}>
-              <div className="card h-100 shadow-sm">
-                <img
-                  src={p.image}
-                  alt={p.title}
-                  className="card-img-top p-3"
-                  style={{ height: "180px", objectFit: "contain" }}
-                />
+              <Link
+                to={`/products/${p.id}`}
+                className="text-decoration-none text-dark"
+              >
+                <div className="card h-100 shadow-sm">
+                  <img
+                    src={p.image}
+                    alt={p.title}
+                    className="card-img-top p-3"
+                    style={{ height: "180px", objectFit: "contain" }}
+                  />
 
-                <div className="card-body d-flex flex-column text-center">
-                  <h6 className="card-title">{p.title}</h6>
-                  <p className="fw-bold mt-auto">{p.price} €</p>
+                  <div className="card-body d-flex flex-column text-center">
+                    <h6 className="card-title">{p.title}</h6>
+                    <p className="fw-bold mt-auto">{p.price} €</p>
+                  </div>
                 </div>
-              </div>
+              </Link>
             </div>
           );
         })}
