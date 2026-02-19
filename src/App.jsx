@@ -1,3 +1,5 @@
+import ProductDetailPage from "./pages/ProductDetailPage";
+
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./index.css";
 
@@ -11,6 +13,7 @@ function App() {
       <Route path="/" element={<HomePage />} />
       <Route path="/AboutPage" element={<AboutPage />} />
       <Route path="/prodotti" element={<ProductsPage />} />
+      <Route path="/products/:id" element={<ProductDetailPage />} />
     </Routes>
   );
 }
