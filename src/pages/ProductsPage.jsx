@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { BudgetContext } from "../contexts/BudgetContext";
+import { useEffect, useState, useContext } from "react";
 import { Link } from "react-router-dom";
 
 export default function ProductsPage() {
@@ -6,15 +7,19 @@ export default function ProductsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  const { budgetMode } = useContext(BudgetContext);
+
+  const filteredProducts = budgetMode
+    ? products.filter((p) => p.price <= 30)
+    : products;
+
   useEffect(() => {
     setLoading(true);
     setError("");
 
     fetch("https://fakestoreapi.com/products")
       .then((res) => {
-        if (!res.ok) {
-          throw new Error("Errore nel recupero prodotti");
-        }
+        if (!res.ok) throw new Error("Errore nel recupero prodotti");
         return res.json();
       })
       .then((data) => {
@@ -27,10 +32,7 @@ export default function ProductsPage() {
       });
   }, []);
 
-  // loading
   if (loading) return <p>Caricamento...</p>;
-
-  // errore
   if (error) return <p>❌ {error}</p>;
 
   return (
@@ -38,30 +40,27 @@ export default function ProductsPage() {
       <h1 className="mb-4 text-center">Prodotti</h1>
 
       <div className="row justify-content-center g-4">
-        {products.map((p) => {
-          return (
-            <div className="col-12 col-sm-6 col-md-4 col-lg-3" key={p.id}>
-              <Link
-                to={`/products/${p.id}`}
-                className="text-decoration-none text-dark"
-              >
-                <div className="card h-100 shadow-sm">
-                  <img
-                    src={p.image}
-                    alt={p.title}
-                    className="card-img-top p-3"
-                    style={{ height: "180px", objectFit: "contain" }}
-                  />
-
-                  <div className="card-body d-flex flex-column text-center">
-                    <h6 className="card-title">{p.title}</h6>
-                    <p className="fw-bold mt-auto">{p.price} €</p>
-                  </div>
+        {filteredProducts.map((p) => (
+          <div className="col-12 col-sm-6 col-md-4 col-lg-3" key={p.id}>
+            <Link
+              to={`/products/${p.id}`}
+              className="text-decoration-none text-dark"
+            >
+              <div className="card h-100 shadow-sm">
+                <img
+                  src={p.image}
+                  alt={p.title}
+                  className="card-img-top p-3"
+                  style={{ height: "180px", objectFit: "contain" }}
+                />
+                <div className="card-body d-flex flex-column text-center">
+                  <h6 className="card-title">{p.title}</h6>
+                  <p className="fw-bold mt-auto">{p.price} €</p>
                 </div>
-              </Link>
-            </div>
-          );
-        })}
+              </div>
+            </Link>
+          </div>
+        ))}
       </div>
     </div>
   );
